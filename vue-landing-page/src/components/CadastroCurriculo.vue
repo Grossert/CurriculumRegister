@@ -86,7 +86,7 @@
         <input v-model="curriculo.idiomas" placeholder="Idiomas" class="input" required />
         <textarea
           v-model="curriculo.objetivoProfissional"
-          placeholder="Objetivo Proficional"
+          placeholder="Objetivo Profissional"
           class="input col-span-full sm:col-span-2"
           required
         >
@@ -140,18 +140,25 @@ export default {
           experiencia: { ...this.experiencia },
         };
 
-        await fetch("http://localhost:5000/curriculos", {
+        const response = await fetch("http://localhost:3000/api/curriculos", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload),
         });
 
+        if (!response.ok) {
+          throw new Error('Erro ao cadastrar currículo');
+        }
+
+        const data = await response.json();
         alert("Currículo cadastrado com sucesso!");
+        console.log('Currículo cadastrado:', data);
       } catch (error) {
         console.error("Erro ao cadastrar currículo:", error);
         alert("Ocorreu um erro ao cadastrar o currículo.");
       }
     },
+
     validarCampos() {
       const {
         nomeCompleto,
